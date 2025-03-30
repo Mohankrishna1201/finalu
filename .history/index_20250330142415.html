@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="qr-reader" class="scanner"></div>
+        <div class="overlay top"></div>
+        <div class="overlay bottom"></div>
+        <div class="overlay left"></div>
+        <div class="overlay right"></div>
+        <div class="qr-container">
+            <div class="qr-square">
+                <div class="qr-border top-left"></div>
+                <div class="qr-border top-right"></div>
+                <div class="qr-border bottom-left"></div>
+                <div class="qr-border bottom-right"></div>
+                <div class="scan-line"></div>
+            </div>
+            <div id="scanned-data" class="scanned-data"></div>
+        </div>
+        <p class="head1">Scan the QR code</p>
+    </div>
+
+    <script>
+        let scanLine = document.querySelector(".scan-line");
+        let scannedDataDiv = document.getElementById("scanned-data");
+
+        function startScanLineAnimation() {
+            scanLine.style.animation = "scan-animation 1.5s infinite alternate";
+        }
+        startScanLineAnimation();
+
+        function onScanSuccess(decodedText) {
+            scannedDataDiv.innerHTML = `<p>Scanned Data: ${decodedText}</p>`;
+        }
+
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            onScanSuccess
+        ).catch(err => console.log(err));
+    </script>
+</body>
+
+</html>
